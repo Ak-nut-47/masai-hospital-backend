@@ -8,8 +8,13 @@ require("dotenv").config()
 const userRouter = Router();
 
 
-userRouter.get("/", (req, res) => {
-    res.status(200).send("Getting Data")
+userRouter.get("/", async (req, res) => {
+    try {
+        const allAppointments = await postModel.find({})
+        res.status(200).json(allAppointments)
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
 })
 userRouter.post("/appointments", async (req, res) => {
     try {
