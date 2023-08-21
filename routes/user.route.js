@@ -2,6 +2,8 @@ const { Router } = require("express")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const { UserModel } = require("../models/user.model")
+const { postModel } = require("../models/post.model")
+
 require("dotenv").config()
 const userRouter = Router();
 
@@ -9,7 +11,15 @@ const userRouter = Router();
 userRouter.get("/", (req, res) => {
     res.status(200).send("Getting Data")
 })
-
+userRouter.post("/appointments", async (req, res) => {
+    try {
+        const newAppointment = new postModel({ ...req.body })
+        await newAppointment.save();
+        res.status(200).json({ msg: "New Appointment Booked Successfully" })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+})
 
 userRouter.post("/signup", async (req, res) => {
     try {
